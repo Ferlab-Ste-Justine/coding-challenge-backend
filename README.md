@@ -10,7 +10,7 @@ Fork this repository, and submit instructions on how to preview the product.
 * Data stored within `database.csv` should remain alphabetically sorted by `screen_name`
 
 ### Technical Guidelines
-* Java, Scala or Go
+* Java or Scala using Apache Spark or Kafka
 * Command-line user interface
 
 ### Product Dataset
