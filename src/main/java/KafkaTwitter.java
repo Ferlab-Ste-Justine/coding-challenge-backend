@@ -52,7 +52,7 @@ public class KafkaTwitter {
         client.connect();
 
         try {
-            while (true) {
+            for (int msgRead = 0; msgRead < 5000; msgRead++) {
                 KeyedMessage<String, String> message = null;
                 try {
                     message = new KeyedMessage<String, String>(catsTopic, queue.take());
@@ -85,8 +85,14 @@ public class KafkaTwitter {
         consumer.subscribe(Arrays.asList(topic));
 
         try {
+            int attempts = 10;
+            int cpt = 0;
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(1000);
+                if (records.count() == 0)
+                    cpt++;
+                if (cpt == attempts)
+                    break;
                 for (ConsumerRecord<String, String> record : records) {
                     JsonObject lineJson = new JsonObject(record.value());
                     System.out.println(lineJson.encodePrettily());
@@ -110,8 +116,10 @@ public class KafkaTwitter {
 
     public static void main (String[] args) {
         try {
-            KafkaTwitter.produce(args[0], args[1], args[2], args[3]);
-            consumer(catsTopic);
+            while (true) {
+                KafkaTwitter.produce(args[0], args[1], args[2], args[3]);
+                consumer(catsTopic);
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
