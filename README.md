@@ -15,3 +15,6 @@ Fork this repository, and submit instructions on how to preview the product.
 
 ### Product Dataset
 * Track the keyword `cats` from [Twitter's Streaming API](https://developer.twitter.com/en/docs/tweets/filter-realtime/api-reference/post-statuses-filter.html)
+
+### Useful Links
+[Apache Spark Docker Image](https://github.com/big-data-europe/docker-spark)
