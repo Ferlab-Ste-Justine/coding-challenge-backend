@@ -6,7 +6,7 @@ public class format {
     private String text;
     private String created_at;
     private boolean retweeted;
-    private JsonObject screen_name; // {"screen_name": "CottonKandy", "lang": "en","name": "CottonKandy","id": 281572434}
+    private JsonObject user; // {"screen_name": "CottonKandy", "lang": "en","name": "CottonKandy","id": 281572434}
     private long id;
 
 
@@ -34,12 +34,12 @@ public class format {
         this.retweeted = retweeted;
     }
 
-    public JsonObject getScreen_name() {
-        return screen_name;
+    public JsonObject getUser() {
+        return user;
     }
 
-    public void setScreen_name(JsonObject screen_name) {
-        this.screen_name = screen_name;
+    public void setUser(JsonObject user) {
+        this.user = user;
     }
 
     public long getId() {

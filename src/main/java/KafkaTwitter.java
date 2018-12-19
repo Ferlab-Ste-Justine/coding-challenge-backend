@@ -40,7 +40,7 @@ public class KafkaTwitter {
                 producerConfig);
 
 
-        BlockingQueue<String> queue = new LinkedBlockingQueue<String>(10000);
+        BlockingQueue<String> queue = new LinkedBlockingQueue<String>();
         StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
         endpoint.trackTerms(Lists.newArrayList("cats"));
 
@@ -51,20 +51,25 @@ public class KafkaTwitter {
 
         client.connect();
 
-        for (int msgRead = 0; msgRead < 1000; msgRead++) {
-            KeyedMessage<String, String> message = null;
-            try {
-                message = new KeyedMessage<String, String>(catsTopic, queue.take());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        try {
+            while (true) {
+                KeyedMessage<String, String> message = null;
+                try {
+                    message = new KeyedMessage<String, String>(catsTopic, queue.take());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                producer.send(message);
             }
-            producer.send(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            producer.close();
+            client.stop();
         }
-        producer.close();
-        client.stop();
     }
 
-    private static void consumer (String topic) throws IOException {
+    private static void consumer (String topic)  {
         final String BOOTSTRAP_SERVERS = "localhost:9092";
 
         Properties props = new Properties();
@@ -80,7 +85,6 @@ public class KafkaTwitter {
         consumer.subscribe(Arrays.asList(topic));
 
         try {
-            ObjectMapper mapper = new ObjectMapper();
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(1000);
                 for (ConsumerRecord<String, String> record : records) {
@@ -91,6 +95,11 @@ public class KafkaTwitter {
                     formattedLine.setId(lineJson.getLong("id"));
                     formattedLine.setCreated_at(lineJson.getString("created_at"));
                     formattedLine.setText(new StringBuilder(lineJson.getString("text")).reverse().toString());
+                    formattedLine.setRetweeted(lineJson.getBoolean("retweeted"));
+                    JsonObject user = new JsonObject();
+                    user.put("screen_name", lineJson.getJsonObject("screen_name"));
+                    user.put("screen_name", lineJson.getJsonObject("screen_name"));
+                    formattedLine.setRetweeted(lineJson.getBoolean("retweeted"));
                 }
             }
         } finally {
@@ -99,7 +108,7 @@ public class KafkaTwitter {
 
     }
 
-    public static void main (String[] args) throws IOException {
+    public static void main (String[] args) {
         try {
             KafkaTwitter.produce(args[0], args[1], args[2], args[3]);
             consumer(catsTopic);
