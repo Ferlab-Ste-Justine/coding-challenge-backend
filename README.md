@@ -18,3 +18,4 @@ Fork this repository, and submit instructions on how to preview the product.
 
 ### Useful Links
 [Apache Spark Docker Image](https://github.com/big-data-europe/docker-spark)
+[Apache Kafka Docker Images](https://hub.docker.com/r/bitnami/kafka)
