@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Coding Challenge
 Fork this repository, and submit instructions on how to preview the product.
 
@@ -19,3 +20,6 @@ Fork this repository, and submit instructions on how to preview the product.
 ### Useful Links
 * [Apache Spark Docker Image](https://hub.docker.com/r/sequenceiq/spark)
 * [Apache Kafka Docker Image](https://hub.docker.com/r/bitnami/kafka)
+=======
+INFO Finished starting connectors and tasks (org.apache.kafka.connect.runtime.distributed.DistributedHerder)
+>>>>>>> Implement ingestion, harmonization and push message in database
