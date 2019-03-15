@@ -1,0 +1,83 @@
+{
+	"info": {
+		"_postman_id": "7a82a89e-fd0d-48c8-b48e-0ef3bfe7d2d5",
+		"name": "CSRJ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Twitter connector",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b2a2409e-bf61-49e8-93bc-189ecb5e0593",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"twitter-source-connector\",\n    \"config\": {\n        \"connector.class\": \"com.github.jcustenborder.kafka.connect.twitter.TwitterSourceConnector\",\n        \"tasks.max\":1,\n        \"process.deletes\":\"false\",\n        \"filter.keywords\":\"cats\",\n        \"kafka.status.topic\":\"twitter_status\",\n        \"twitter.oauth.accessToken\":\"{{twitter_access_token}}\",\n        \"twitter.oauth.accessTokenSecret\": \"{{twitter_access_token_secret}}\",\n        \"twitter.oauth.consumerKey\":\"{{twitter_consumer_key}}\",\n        \"twitter.oauth.consumerSecret\":\"{{twitter_consumer_secret}}\"\n        \n    }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create JDBC connector",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"jdbc-sink-connector\",\n  \"config\": {\n    \"connector.class\": \"io.confluent.connect.jdbc.JdbcSinkConnector\",\n    \"tasks.max\": \"1\",\n    \"topics\": \"harmonized_status\",\n    \"insert.mode\":\"upsert\",\n    \"pk.mode\":\"record_key\",\n    \"pk.fields\":\"id\",\n    \"connection.url\": \"jdbc:sqlite:/root/db/status.db\",\n    \"auto.create\": \"true\"\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
